@@ -3,7 +3,7 @@ import CashBidsList from './components/CashBidsList.vue'
 import Header from './components/Header.vue'
 import { ref } from 'vue'
 
-const companyData = ref({ name: 'No Name', logo: '' })
+const companyData = ref({ name: '', logo: '' })
 </script>
 
 <template>

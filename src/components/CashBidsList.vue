@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 
 import { provideApolloClient } from '@vue/apollo-composable'
-import { apolloClient } from '../apollo-client'
+import { apolloClient } from '../clients/apollo-client'
 
 provideApolloClient(apolloClient)
 
@@ -59,8 +59,8 @@ const locations = computed(() => {
   return [...new Set(allLocations)]
 })
 
-const selectedCommodities = ref(commodities.value)
-const selectedLocations = ref(locations.value)
+const selectedCommodities = ref([])
+const selectedLocations = ref([])
 
 const filteredCashBids = computed(() => {
   return cashBidList.value.filter((bid) => {
@@ -94,18 +94,6 @@ const dropdownOpen = ref({
   location: false,
 })
 
-onMounted(() => {
-  selectedCommodities.value = commodities.value
-  selectedLocations.value = locations.value
-})
-
-const companyName = computed(() => result.value?.viewer?.company?.name ?? '')
-const companyLogo = computed(() => result.value?.viewer?.company?.logo ?? '')
-
-const emit = defineEmits(['companyData'])
-
-emit('companyData', { name: companyName, logo: companyLogo })
-
 function toggleDropdown(type: string) {
   dropdownOpen.value[type] = !dropdownOpen.value[type]
   console.log(selectedCommodities)
@@ -116,6 +104,13 @@ function toggleDropdownIfOpen(type) {
     toggleDropdown(type)
   }
 }
+
+const companyName = computed(() => result.value?.viewer?.company?.name ?? '')
+const companyLogo = computed(() => result.value?.viewer?.company?.logo ?? '')
+
+const emit = defineEmits(['companyData'])
+
+emit('companyData', { name: companyName, logo: companyLogo })
 </script>
 
 <template>
