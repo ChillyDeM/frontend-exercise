@@ -1,5 +1,5 @@
-<script setup lang="ts">
-const props = defineProps({
+<script setup lang="ts" name="AppHeader">
+defineProps({
   name: String,
   logo: String,
 })

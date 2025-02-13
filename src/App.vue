@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CashBidsList from './components/CashBidsList.vue'
-import Header from './components/Header.vue'
+import Header from './components/AppHeader.vue'
 import { ref } from 'vue'
 
 const companyData = ref({ name: '', logo: '' })

@@ -1,51 +1,13 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
-
 import { provideApolloClient } from '@vue/apollo-composable'
 import { apolloClient } from '../clients/apollo-client'
+import { GetCashBidsFromCompany } from '@/queries/GetCashsForCompany'
 
 provideApolloClient(apolloClient)
 
-const GET_CASHBIDS_FOR_COMPANY = gql`
-  query CashBidsForCompany {
-    viewer {
-      ... on Employee {
-        company {
-          name
-          logo
-          cashBids {
-            edges {
-              node {
-                commodity {
-                  id
-                  name
-                }
-                location {
-                  id
-                  name
-                }
-                price
-                basis
-                deliveryEnd
-                deliveryStart
-                futuresMonth
-                futuresSymbol
-                quote {
-                  lastPrice
-                  priceChange
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`
-
-const { result, loading, error } = useQuery(GET_CASHBIDS_FOR_COMPANY)
+const { result, loading, error } = useQuery(GetCashBidsFromCompany)
 
 const cashBidList = computed(() => result.value?.viewer?.company?.cashBids?.edges ?? [])
 
@@ -153,7 +115,7 @@ emit('companyData', { name: companyName, logo: companyLogo })
       <table>
         <thead>
           <tr>
-            <th>Bid Symbol</th>
+            <th>Symbol</th>
             <th>Price</th>
             <th>Basis</th>
             <th>Futures Price</th>
@@ -271,10 +233,6 @@ tbody tr:hover {
 
 .negative-change {
   background-color: rgba(114, 28, 36, 0.4);
-}
-
-.no-change {
-  background-color: #ffffff;
 }
 
 .center {
