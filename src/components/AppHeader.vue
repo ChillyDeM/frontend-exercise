@@ -1,4 +1,4 @@
-<script setup lang="ts" name="AppHeader">
+<script setup lang="ts">
 defineProps({
   name: String,
   logo: String,
