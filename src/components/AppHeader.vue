@@ -58,4 +58,29 @@ i img {
     border-radius: 8px;
   }
 }
+
+@media (max-width: 500px) {
+  .item {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+  }
+
+  i {
+    max-width: 40%;
+    margin: auto;
+  }
+  img {
+    margin: auto;
+    padding-top: 5px;
+  }
+
+  .title {
+    margin: auto;
+  }
+
+  h3 {
+    font-size: 1.4rem;
+  }
+}
 </style>

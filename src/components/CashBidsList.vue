@@ -63,30 +63,31 @@ function toggleDropdownIfOpen(type) {
 </script>
 
 <template>
-  <div class="dropdown">
-    <button class="dropbtn" @click="toggleDropdown('commodity')">Filter by Commodities</button>
-    <div
-      class="dropdown-container"
-      v-show="dropdownOpen.commodity"
-      @mouseleave="toggleDropdownIfOpen('commodity')"
-    >
-      <div v-for="commodity in commodities" :key="commodity">
-        <input type="checkbox" :id="commodity" :value="commodity" v-model="selectedCommodities" />
-        <label class="checkbox-label" :for="commodity">{{ commodity }}</label>
+  <div class="dropdown-wrapper">
+    <div class="dropdown">
+      <button class="dropbtn" @click="toggleDropdown('commodity')">Filter by Commodities</button>
+      <div
+        class="dropdown-container"
+        v-show="dropdownOpen.commodity"
+        @mouseleave="toggleDropdownIfOpen('commodity')"
+      >
+        <div v-for="commodity in commodities" :key="commodity">
+          <input type="checkbox" :id="commodity" :value="commodity" v-model="selectedCommodities" />
+          <label class="checkbox-label" :for="commodity">{{ commodity }}</label>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="dropdown">
-    <button class="dropbtn" @click="toggleDropdown('location')">Filter by Location</button>
-    <div
-      class="dropdown-container"
-      v-show="dropdownOpen.location"
-      @mouseleave="toggleDropdownIfOpen('location')"
-    >
-      <div v-for="location in locations" :key="location">
-        <input type="checkbox" :id="location" :value="location" v-model="selectedLocations" />
-        <label :for="location">{{ location }}</label>
+    <div class="dropdown">
+      <button class="dropbtn" @click="toggleDropdown('location')">Filter by Location</button>
+      <div
+        class="dropdown-container"
+        v-show="dropdownOpen.location"
+        @mouseleave="toggleDropdownIfOpen('location')"
+      >
+        <div v-for="location in locations" :key="location">
+          <input type="checkbox" :id="location" :value="location" v-model="selectedLocations" />
+          <label :for="location">{{ location }}</label>
+        </div>
       </div>
     </div>
   </div>
@@ -103,9 +104,9 @@ function toggleDropdownIfOpen(type) {
             <th>Basis</th>
             <th>Futures Price</th>
             <th>Change</th>
-            <th>Futures Month</th>
-            <th>Delivery Start</th>
-            <th>Delivery End</th>
+            <th class="large-display">Futures Month</th>
+            <th class="large-display">Delivery Start</th>
+            <th class="large-display">Delivery End</th>
           </tr>
         </thead>
         <tbody>
@@ -123,9 +124,9 @@ function toggleDropdownIfOpen(type) {
             >
               {{ bid.node.quote.priceChange }}
             </td>
-            <td>{{ bid.node.futuresMonth }}</td>
-            <td>{{ bid.node.deliveryStart }}</td>
-            <td>{{ bid.node.deliveryEnd }}</td>
+            <td class="large-display">{{ bid.node.futuresMonth }}</td>
+            <td class="large-display">{{ bid.node.deliveryStart }}</td>
+            <td class="large-display">{{ bid.node.deliveryEnd }}</td>
           </tr>
         </tbody>
       </table>
@@ -220,5 +221,41 @@ tbody tr:hover {
 
 .center {
   text-align: center;
+}
+
+@media (max-width: 500px) {
+  .large-display {
+    display: none;
+  }
+
+  .table {
+    width: 90%;
+    overflow-x: auto;
+  }
+
+  .dropdown-wrapper {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+  }
+
+  .dropdown {
+    padding: 5px;
+    max-width: 50%;
+    justify-content: center;
+  }
+
+  .dropbtn {
+    background-color: #f2f2f2;
+    color: black;
+    padding: 10px;
+    font-size: 13px;
+    border: 2px solid #f2f2f2;
+    cursor: pointer;
+  }
+
+  .dropdown-wrapper {
+    width: 100%;
+  }
 }
 </style>
