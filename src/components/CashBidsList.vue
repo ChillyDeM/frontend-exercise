@@ -1,23 +1,17 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useQuery } from '@vue/apollo-composable'
-import { provideApolloClient } from '@vue/apollo-composable'
-import { apolloClient } from '../clients/apollo-client'
-import { GetCashBidsFromCompany } from '@/queries/GetCashsForCompany'
 
-provideApolloClient(apolloClient)
-
-const { result, loading, error } = useQuery(GetCashBidsFromCompany)
-
-const cashBidList = computed(() => result.value?.viewer?.company?.cashBids?.edges ?? [])
+const props = defineProps({
+  cashBidList: Array,
+})
 
 const commodities = computed(() => {
-  const allCommodities = cashBidList.value.map((bid) => bid.node.commodity.name)
+  const allCommodities = props.cashBidList?.map((bid) => bid.node.commodity.name)
   return [...new Set(allCommodities)]
 })
 
 const locations = computed(() => {
-  const allLocations = cashBidList.value.map((bid) => bid.node.location.name)
+  const allLocations = props.cashBidList?.map((bid) => bid.node.location.name)
   return [...new Set(allLocations)]
 })
 
@@ -25,7 +19,7 @@ const selectedCommodities = ref([])
 const selectedLocations = ref([])
 
 const filteredCashBids = computed(() => {
-  return cashBidList.value.filter((bid) => {
+  return props.cashBidList?.filter((bid) => {
     return (
       (selectedCommodities.value.length === 0 ||
         selectedCommodities.value.includes(bid.node.commodity.name)) &&
@@ -66,44 +60,33 @@ function toggleDropdownIfOpen(type) {
     toggleDropdown(type)
   }
 }
-
-const companyName = computed(() => result.value?.viewer?.company?.name ?? '')
-const companyLogo = computed(() => result.value?.viewer?.company?.logo ?? '')
-
-const emit = defineEmits(['companyData'])
-
-emit('companyData', { name: companyName, logo: companyLogo })
 </script>
 
 <template>
-  <div v-if="loading" class="center">Loading...</div>
-  <div v-else-if="error">Error: {{ error.message }}</div>
-  <div v-else>
-    <div class="dropdown">
-      <button class="dropbtn" @click="toggleDropdown('commodity')">Filter by Commodities</button>
-      <div
-        class="dropdown-container"
-        v-show="dropdownOpen.commodity"
-        @mouseleave="toggleDropdownIfOpen('commodity')"
-      >
-        <div v-for="commodity in commodities" :key="commodity">
-          <input type="checkbox" :id="commodity" :value="commodity" v-model="selectedCommodities" />
-          <label class="checkbox-label" :for="commodity">{{ commodity }}</label>
-        </div>
+  <div class="dropdown">
+    <button class="dropbtn" @click="toggleDropdown('commodity')">Filter by Commodities</button>
+    <div
+      class="dropdown-container"
+      v-show="dropdownOpen.commodity"
+      @mouseleave="toggleDropdownIfOpen('commodity')"
+    >
+      <div v-for="commodity in commodities" :key="commodity">
+        <input type="checkbox" :id="commodity" :value="commodity" v-model="selectedCommodities" />
+        <label class="checkbox-label" :for="commodity">{{ commodity }}</label>
       </div>
     </div>
+  </div>
 
-    <div class="dropdown">
-      <button class="dropbtn" @click="toggleDropdown('location')">Filter by Location</button>
-      <div
-        class="dropdown-container"
-        v-show="dropdownOpen.location"
-        @mouseleave="toggleDropdownIfOpen('location')"
-      >
-        <div v-for="location in locations" :key="location">
-          <input type="checkbox" :id="location" :value="location" v-model="selectedLocations" />
-          <label :for="location">{{ location }}</label>
-        </div>
+  <div class="dropdown">
+    <button class="dropbtn" @click="toggleDropdown('location')">Filter by Location</button>
+    <div
+      class="dropdown-container"
+      v-show="dropdownOpen.location"
+      @mouseleave="toggleDropdownIfOpen('location')"
+    >
+      <div v-for="location in locations" :key="location">
+        <input type="checkbox" :id="location" :value="location" v-model="selectedLocations" />
+        <label :for="location">{{ location }}</label>
       </div>
     </div>
   </div>

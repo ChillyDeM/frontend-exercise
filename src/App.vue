@@ -1,19 +1,39 @@
 <script setup lang="ts">
 import CashBidsList from './components/CashBidsList.vue'
 import Header from './components/AppHeader.vue'
-import { ref } from 'vue'
+import { computed } from 'vue'
+import { useQuery } from '@vue/apollo-composable'
+import { provideApolloClient } from '@vue/apollo-composable'
+import { apolloClient } from './clients/apollo-client'
+import { GetCashBidsFromCompany } from '@/queries/GetCashsForCompany'
 
-const companyData = ref({ name: '', logo: '' })
+provideApolloClient(apolloClient)
+
+const { result, loading, error } = useQuery(GetCashBidsFromCompany)
+
+const cashBidList = computed(() => result.value?.viewer?.company?.cashBids?.edges ?? [])
+const companyData = computed(() => {
+  return {
+    name: result.value?.viewer?.company?.name ?? '',
+    logo: result.value?.viewer?.company?.logo ?? '',
+  }
+})
 </script>
 
 <template>
-  <header>
-    <Header :name="companyData.name" :logo="companyData.logo" />
-  </header>
+  <div v-if="loading" class="center">Loading...</div>
+  <div v-else-if="error">Error: {{ error.message }}</div>
+  <div v-else>
+    <header>
+      <Header :name="companyData.name" :logo="companyData.logo" />
+    </header>
 
-  <main>
-    <div class="wrapper"><CashBidsList @companyData="(msg) => (companyData = msg)" /></div>
-  </main>
+    <main>
+      <div class="wrapper">
+        <CashBidsList :cashBidList="cashBidList" />
+      </div>
+    </main>
+  </div>
 </template>
 
 <style scoped>
