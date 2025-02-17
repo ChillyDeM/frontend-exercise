@@ -41,26 +41,7 @@ const companyData = computed<Company>(() => {
 </template>
 
 <style scoped>
-header {
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-}
-
 .wrapper {
   padding: 20px;
-}
-
-@media (min-width: 124px) {
-  header {
-    place-items: center;
-    top: 0;
-  }
-}
-
-@media (max-width: 500px) {
-  #app {
-    padding: 0;
-  }
 }
 </style>
