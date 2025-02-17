@@ -22,9 +22,7 @@ npm install
 
 ### Create set environment variables
 
-```
 Copy .env.example to create a new .env file and update VITE_API_URL and VITE_API_TOKEN values
-```
 
 ### Compile and Hot-Reload for Development
 
