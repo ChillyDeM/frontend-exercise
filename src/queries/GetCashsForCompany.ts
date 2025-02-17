@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-export const GetCashBidsFromCompany = gql`
+export const GetCashBidsForCompany = gql`
   query CashBidsForCompany {
     viewer {
       ... on Employee {

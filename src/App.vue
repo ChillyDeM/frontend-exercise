@@ -5,14 +5,18 @@ import { computed } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 import { provideApolloClient } from '@vue/apollo-composable'
 import { apolloClient } from './clients/apollo-client'
-import { GetCashBidsFromCompany } from '@/queries/GetCashsForCompany'
+import { GetCashBidsForCompany } from '@/queries/GetCashsForCompany'
+import type { Result, Company, CashBidEdge } from './classes/GetCashBidsForCompanyResult'
 
 provideApolloClient(apolloClient)
 
-const { result, loading, error } = useQuery(GetCashBidsFromCompany)
+const { result, loading, error } = useQuery<Result>(GetCashBidsForCompany)
 
-const cashBidList = computed(() => result.value?.viewer?.company?.cashBids?.edges ?? [])
-const companyData = computed(() => {
+const cashBidList = computed<CashBidEdge[]>(
+  () => result.value?.viewer?.company?.cashBids?.edges ?? [],
+)
+
+const companyData = computed<Company>(() => {
   return {
     name: result.value?.viewer?.company?.name ?? '',
     logo: result.value?.viewer?.company?.logo ?? '',

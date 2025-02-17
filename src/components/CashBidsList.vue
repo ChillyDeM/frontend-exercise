@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import type { CashBidEdge } from '@/classes/GetCashBidsForCompanyResult'
+import type { GroupedCashBids } from '@/classes/GroupedCashBids'
 import { ref, computed } from 'vue'
 
-const props = defineProps({
-  cashBidList: Array,
-})
+const props = defineProps<{
+  cashBidList: CashBidEdge[]
+}>()
 
 const commodities = computed(() => {
   const allCommodities = props.cashBidList?.map((bid) => bid.node.commodity.name)
@@ -15,8 +17,8 @@ const locations = computed(() => {
   return [...new Set(allLocations)]
 })
 
-const selectedCommodities = ref([])
-const selectedLocations = ref([])
+const selectedCommodities = ref<string[]>([])
+const selectedLocations = ref<string[]>([])
 
 const filteredCashBids = computed(() => {
   return props.cashBidList?.filter((bid) => {
@@ -30,7 +32,7 @@ const filteredCashBids = computed(() => {
 })
 
 const groupedCashBids = computed(() => {
-  const grouped = {}
+  const grouped: GroupedCashBids = {}
   filteredCashBids.value.forEach((bid) => {
     const location = bid.node.location.name
     const commodity = bid.node.commodity.name
@@ -45,17 +47,17 @@ const groupedCashBids = computed(() => {
   return grouped
 })
 
-const dropdownOpen = ref({
+const dropdownOpen = ref<Record<'commodity' | 'location', boolean>>({
   commodity: false,
   location: false,
 })
 
-function toggleDropdown(type: string) {
+function toggleDropdown(type: 'commodity' | 'location') {
   dropdownOpen.value[type] = !dropdownOpen.value[type]
   console.log(selectedCommodities)
 }
 
-function toggleDropdownIfOpen(type) {
+function toggleDropdownIfOpen(type: 'commodity' | 'location') {
   if (dropdownOpen.value[type]) {
     toggleDropdown(type)
   }
